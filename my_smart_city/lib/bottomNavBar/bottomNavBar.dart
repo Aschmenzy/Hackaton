@@ -1,15 +1,17 @@
 // ignore_for_file: file_names, prefer_const_constructors, prefer_final_fields, use_key_in_widget_constructors
 
 import 'package:curved_navigation_bar/curved_navigation_bar.dart';
-import 'package:firebase_auth/firebase_auth.dart';
+
 import 'package:flutter/material.dart';
+import 'package:my_smart_city/pages/camera_page.dart';
 import 'package:my_smart_city/pages/home_page.dart';
+import 'package:my_smart_city/pages/your_info.dart';
 
 // Define your pages here
 final List<Widget> _pages = [
   HomePage(),
-  Page2(),
-  Page3(),
+  CameraPage(),
+  infoPage(),
 ];
 
 class NavBar extends StatefulWidget {
@@ -34,15 +36,16 @@ class _NavBarState extends State<NavBar> {
   Widget build(BuildContext context) {
     return Scaffold(
       bottomNavigationBar: CurvedNavigationBar(
+        height: 60,
         backgroundColor: Colors.blue,
         key: _bottomNavigationKey,
         items: <Widget>[
-          Icon(Icons.add,
-              size: 30, color: _page == 0 ? Colors.blue : Colors.black),
+          Icon(Icons.home,
+              size: 25, color: _page == 0 ? Colors.blue : Colors.black),
           Icon(Icons.photo_camera,
-              size: 30, color: _page == 1 ? Colors.blue : Colors.black),
-          Icon(Icons.compare_arrows,
-              size: 30, color: _page == 2 ? Colors.blue : Colors.black),
+              size: 25, color: _page == 1 ? Colors.blue : Colors.black),
+          Icon(Icons.settings,
+              size: 25, color: _page == 2 ? Colors.blue : Colors.black),
         ],
         onTap: (index) {
           setState(() {
@@ -67,27 +70,5 @@ class _NavBarState extends State<NavBar> {
         ),
       ),
     );
-  }
-}
-
-class Page2 extends StatelessWidget {
-  void logOut() {
-    FirebaseAuth.instance.signOut();
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    return Center(
-        child: FloatingActionButton(
-      onPressed: logOut,
-      child: Icon(Icons.logout),
-    ));
-  }
-}
-
-class Page3 extends StatelessWidget {
-  @override
-  Widget build(BuildContext context) {
-    return Center(child: Text('Page 3'));
   }
 }

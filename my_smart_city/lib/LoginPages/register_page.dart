@@ -4,6 +4,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:hive_flutter/hive_flutter.dart';
 import 'package:my_smart_city/util/my_button.dart';
 import 'package:my_smart_city/util/text_field.dart';
 
@@ -59,7 +60,6 @@ class _RegisterPageState extends State<RegisterPage> {
     }
   }
 
-
   //adding user details when logging in and setting it to a specific user uid
   Future addUserDetails(
     String UserEmail,
@@ -67,14 +67,14 @@ class _RegisterPageState extends State<RegisterPage> {
     String UserUid,
   ) async {
     User? user = FirebaseAuth.instance.currentUser;
-    await FirebaseFirestore.instance
-        .collection("UserData")
-        .doc(user!.uid)
-        .set({
+    await FirebaseFirestore.instance.collection("UserData").doc(user!.uid).set({
       'UserEmail': UserEmail,
       'Name': Name,
       'UserUid': UserUid,
     });
+
+    final myBox = await Hive.openBox('myBox');
+    myBox.put('UserName', Name);
   }
 
   //displaying message for errors
@@ -91,132 +91,108 @@ class _RegisterPageState extends State<RegisterPage> {
 
   @override
   Widget build(BuildContext context) {
-    Brightness brightness = MediaQuery.of(context).platformBrightness;
-    bool isDarkMode = brightness == Brightness.dark;
     return Scaffold(
-      body: Container(
-        height: MediaQuery.of(context).size.height,
-        width: MediaQuery.of(context).size.width,
-        decoration: BoxDecoration(
-            image: DecorationImage(
-                image: AssetImage(isDarkMode
-                    ? 'lib/assets/darkBackground.jpg'
-                    : 'lib/assets/lightBackground.jpg'),
-                fit: BoxFit.cover)),
-        child: Center(
-          child: SingleChildScrollView(
-            child: Center(
-              child: Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 30.0),
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    //SIZED BOX
-                    const SizedBox(height: 50),
+      body: Center(
+        child: SingleChildScrollView(
+          child: Center(
+            child: Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 30.0),
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  //SIZED BOX
+                  const SizedBox(height: 50),
 
-                    //TEXT
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.start,
-                      children: [
-                        Text(
-                          "Make an \naccount ",
-                          style: GoogleFonts.inter(
-                              fontWeight: FontWeight.bold, fontSize: 40),
-                        ),
-                      ],
-                    ),
+                  //TEXT
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.start,
+                    children: [
+                      Text(
+                        "Make an \naccount ",
+                        style: GoogleFonts.inter(
+                            fontWeight: FontWeight.bold, fontSize: 40),
+                      ),
+                    ],
+                  ),
 
-                    //SIZED BOX
-                    const SizedBox(height: 15),
+                  //SIZED BOX
+                  const SizedBox(height: 15),
 
-                    //TEXTFIELDS FOR EMAIL AND PASSWORD
+                  //TEXTFIELDS FOR EMAIL AND PASSWORD
 
-                    //name text field
-                    MyTextField(
-                      controller: nameTextController,
-                      hintText: "Name",
-                      obscureText: false,
-                    ),
-                    const SizedBox(height: 18),
-                    //email
-                    MyTextField(
-                      controller: emailTextController,
-                      hintText: "Email",
-                      obscureText: false,
-                    ),
-                    const SizedBox(height: 18),
-                    //password
-                    MyTextField(
-                      controller: passwordTextController,
-                      hintText: "Password",
-                      obscureText: true,
-                    ),
-                    const SizedBox(height: 18),
-                    //password
-                    MyTextField(
-                      controller: confirmPasswordTextController,
-                      hintText: "Confirm Password",
-                      obscureText: true,
-                    ),
-                    const SizedBox(height: 18),
-                    //LOG IN BUTTON
-                    MyButton(
-                      buttonText: "SIGN UP",
-                      ontap: signUp,
-                      height: 65,
-                    ),
-                    //SIZED BOX
-                    const SizedBox(height: 15),
+                  //name text field
+                  MyTextField(
+                    controller: nameTextController,
+                    hintText: "Name",
+                    obscureText: false,
+                  ),
+                  const SizedBox(height: 18),
+                  //email
+                  MyTextField(
+                    controller: emailTextController,
+                    hintText: "Email",
+                    obscureText: false,
+                  ),
+                  const SizedBox(height: 18),
+                  //password
+                  MyTextField(
+                    controller: passwordTextController,
+                    hintText: "Password",
+                    obscureText: true,
+                  ),
+                  const SizedBox(height: 18),
+                  //password
+                  MyTextField(
+                    controller: confirmPasswordTextController,
+                    hintText: "Confirm Password",
+                    obscureText: true,
+                  ),
+                  const SizedBox(height: 18),
+                  //LOG IN BUTTON
+                  MyButton(
+                    buttonText: "SIGN UP",
+                    ontap: signUp,
+                    height: 65,
+                  ),
+                  //SIZED BOX
+                  const SizedBox(height: 15),
 
-                    Row(
-                      children: [
-                        Expanded(
-                            child: Divider(
-                          color: Colors.black,
-                          thickness: 0.5,
-                        )),
-                        Text(
-                          'Or continue with',
-                          style: GoogleFonts.inter(
-                              fontSize: 14, fontWeight: FontWeight.w600),
-                        ),
-                        Expanded(
+                  Row(
+                    children: [
+                      Expanded(
                           child: Divider(
-                            color: Colors.black,
-                            thickness: 0.5,
-                          ),
-                        )
-                      ],
-                    ),
+                        color: Colors.black,
+                        thickness: 0.5,
+                      )),
+                    ],
+                  ),
 
-                    const SizedBox(
-                      height: 20,
-                    ),
+                  const SizedBox(
+                    height: 20,
+                  ),
 
-                    //TEXT WITH REGISTER PAGE TEXT
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        Text(
-                          "Already a member?",
-                          style: GoogleFonts.inter(
-                              color: Theme.of(context).colorScheme.primary),
-                        ),
-                        const SizedBox(
-                          width: 5,
-                        ),
-                        GestureDetector(
-                            onTap: widget.onTap,
-                            child: Text(
-                              "Sign In Now!",
-                              style: GoogleFonts.inter(
-                                  color: Colors.blue,
-                                  fontWeight: FontWeight.bold),
-                            )),
-                      ],
-                    )
-                  ],
-                ),
+                  //TEXT WITH REGISTER PAGE TEXT
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Text(
+                        "Already a member?",
+                        style: GoogleFonts.inter(color: Colors.black),
+                      ),
+                      const SizedBox(
+                        width: 10,
+                      ),
+                      GestureDetector(
+                          onTap: widget.onTap,
+                          child: Text(
+                            "Sign In Now!",
+                            style: GoogleFonts.inter(
+                                color: Colors.blue,
+                                fontWeight: FontWeight.bold),
+                          )),
+                    ],
+                  )
+                ],
               ),
             ),
           ),

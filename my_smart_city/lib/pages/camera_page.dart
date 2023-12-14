@@ -1,63 +1,107 @@
 import 'package:camera/camera.dart';
 import 'package:flutter/material.dart';
 
-late List<CameraDescription> _cameras;
-
-Future<void> main() async {
-  WidgetsFlutterBinding.ensureInitialized();
-
-  _cameras = await availableCameras();
-  runApp(const CameraApp());
-}
-
-/// CameraApp is the Main Application.
-class CameraApp extends StatefulWidget {
-  /// Default Constructor
-  const CameraApp({super.key});
-
+class CameraPage extends StatefulWidget {
   @override
-  State<CameraApp> createState() => _CameraAppState();
+  State<CameraPage> createState() => _CameraPageState();
 }
 
-class _CameraAppState extends State<CameraApp> {
-  late CameraController controller;
+class _CameraPageState extends State<CameraPage> {
+  late List<CameraDescription> cameras;
+  late CameraController cameraController;
+
+  int direction = 0;
 
   @override
   void initState() {
+    startCamera();
     super.initState();
-    controller = CameraController(_cameras[0], ResolutionPreset.max);
-    controller.initialize().then((_) {
+  }
+
+  void startCamera() async {
+    cameras = await availableCameras();
+
+    cameraController = CameraController(
+        cameras[direction], ResolutionPreset.high,
+        enableAudio: false);
+
+    await cameraController.initialize().then((value) {
       if (!mounted) {
         return;
       }
+      //refreshes the screen
       setState(() {});
-    }).catchError((Object e) {
-      if (e is CameraException) {
-        switch (e.code) {
-          case 'CameraAccessDenied':
-            // Handle access errors here.
-            break;
-          default:
-            // Handle other errors here.
-            break;
-        }
-      }
+    }).catchError((e) {
+      print(e);
     });
   }
 
   @override
   void dispose() {
-    controller.dispose();
+    cameraController.dispose();
     super.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
-    if (!controller.value.isInitialized) {
-      return Container();
+    if (cameraController.value.isInitialized) {
+      return Scaffold(
+        body: Stack(
+          children: [
+            Positioned.fill(child: CameraPreview(cameraController)),
+            GestureDetector(
+              onTap: () {
+                setState(() {
+                  direction = direction == 0 ? 1 : 0;
+                  startCamera();
+                });
+              },
+              child:
+                  button(Icons.flip_camera_ios_outlined, Alignment.bottomLeft),
+            ),
+            GestureDetector(
+              onTap: () {
+                cameraController.takePicture().then((XFile? file) {
+                  if (mounted) {
+                    if (file != null) {
+                      print(file.path);
+                    }
+                  }
+                });
+              },
+              child: button(Icons.camera_alt_outlined, Alignment.bottomCenter),
+            ),
+          ],
+        ),
+      );
+    } else {
+      return SizedBox();
     }
-    return MaterialApp(
-      home: CameraPreview(controller),
-    );
   }
+}
+
+Widget button(IconData icon, Alignment alignment) {
+  return Align(
+    alignment: alignment,
+    child: Container(
+      margin: EdgeInsets.only(
+        left: 10,
+        bottom: 30,
+      ),
+      height: 50,
+      width: 50,
+      decoration: BoxDecoration(
+          shape: BoxShape.circle,
+          color: Colors.white,
+          boxShadow: [
+            BoxShadow(color: Colors.black, offset: Offset(2, 2), blurRadius: 10)
+          ]),
+      child: Center(
+        child: Icon(
+          icon,
+          color: Colors.black,
+        ),
+      ),
+    ),
+  );
 }
