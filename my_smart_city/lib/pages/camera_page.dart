@@ -1,7 +1,10 @@
-// ignore_for_file: use_key_in_widget_constructors
+// ignore_for_file: use_key_in_widget_constructors, prefer_const_literals_to_create_immutables, prefer_const_constructors, avoid_print, unnecessary_nullable_for_final_variable_declarations
 
 import 'package:camera/camera.dart';
 import 'package:flutter/material.dart';
+import 'dart:io';
+import 'package:path_provider/path_provider.dart';
+import 'package:image_gallery_saver/image_gallery_saver.dart';
 
 class CameraPage extends StatefulWidget {
   @override
@@ -62,14 +65,26 @@ class _CameraPageState extends State<CameraPage> {
                   button(Icons.flip_camera_ios_outlined, Alignment.bottomLeft),
             ),
             GestureDetector(
-              onTap: () {
-                cameraController.takePicture().then((XFile? file) {
-                  if (mounted) {
-                    if (file != null) {
-                      print(file.path);
-                    }
-                  }
-                });
+              onTap: () async {
+                final XFile? file = await cameraController.takePicture();
+                if (file != null) {
+                  final String? imagePath = file.path;
+                  final File imageFile = File(imagePath!);
+
+                  // Get the directory to save the image
+                  final Directory? picturesDirectory =
+                      await getApplicationDocumentsDirectory();
+                  final String picturesPath = picturesDirectory!.path;
+
+                  // Copy the file to the new path
+                  final File newImage = await imageFile.copy(
+                      '$picturesPath/${DateTime.now().toIso8601String()}.png');
+
+                  // Save the image to the gallery
+                  final result =
+                      await ImageGallerySaver.saveFile(newImage.path);
+                  print(result);
+                }
               },
               child: button(Icons.camera_alt_outlined, Alignment.bottomCenter),
             ),
