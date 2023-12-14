@@ -1,6 +1,7 @@
 // ignore_for_file: file_names, prefer_const_constructors, prefer_final_fields, use_key_in_widget_constructors
 
 import 'package:curved_navigation_bar/curved_navigation_bar.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:my_smart_city/pages/home_page.dart';
 
@@ -71,9 +72,17 @@ class _NavBarState extends State<NavBar> {
 }
 
 class Page2 extends StatelessWidget {
+  void logOut() {
+    FirebaseAuth.instance.signOut();
+  }
+
   @override
   Widget build(BuildContext context) {
-    return Center(child: Text('Page 2'));
+    return Center(
+        child: FloatingActionButton(
+      onPressed: logOut,
+      child: Icon(Icons.logout),
+    ));
   }
 }
 

@@ -42,11 +42,14 @@ class _RegisterPageState extends State<RegisterPage> {
     }
     //try creating the user
     try {
-      await FirebaseAuth.instance.createUserWithEmailAndPassword(
-          email: emailTextController.text,
-          password: passwordTextController.text);
+      UserCredential userCredential =
+          await FirebaseAuth.instance.createUserWithEmailAndPassword(
+        email: emailTextController.text,
+        password: passwordTextController.text,
+      );
       //add to database
-      addUserDetails(emailTextController.text, nameTextController.text);
+      addUserDetails(emailTextController.text, nameTextController.text,
+          userCredential.user!.uid);
       //pop loading circle
       if (context.mounted) Navigator.pop(context);
     } on FirebaseAuthException catch (e) {
@@ -56,19 +59,21 @@ class _RegisterPageState extends State<RegisterPage> {
     }
   }
 
+
   //adding user details when logging in and setting it to a specific user uid
   Future addUserDetails(
     String UserEmail,
     String Name,
+    String UserUid,
   ) async {
     User? user = FirebaseAuth.instance.currentUser;
     await FirebaseFirestore.instance
-        .collection("User Email")
+        .collection("UserData")
         .doc(user!.uid)
         .set({
       'UserEmail': UserEmail,
       'Name': Name,
-      'UserUid': user.uid,
+      'UserUid': UserUid,
     });
   }
 
@@ -183,8 +188,6 @@ class _RegisterPageState extends State<RegisterPage> {
                         )
                       ],
                     ),
-
-
 
                     const SizedBox(
                       height: 20,
