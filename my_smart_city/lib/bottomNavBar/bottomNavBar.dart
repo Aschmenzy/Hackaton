@@ -56,7 +56,6 @@ class _NavBarState extends State<NavBar> {
         },
       ),
       body: Container(
-        color: Colors.blue,
         child: Center(
           child: PageView(
             controller: _pageController,
