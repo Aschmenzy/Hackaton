@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "11352248698",
+    "project_id": "hackathon-b0315",
+    "storage_bucket": "hackathon-b0315.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:11352248698:android:07ebf3f7c6d848cd5846c3",
+        "android_client_info": {
+          "package_name": "com.example.my_smart_city"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCz89K1YGc7ekuqrHchvwLrowJrrEmDA1E"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
