@@ -15,6 +15,7 @@ class _CameraPageState extends State<CameraPage> {
   late CameraController cameraController;
   int direction = 0;
   String _intoxicationLevel = '';
+  bool isready = false;
 
   @override
   void initState() {
@@ -29,8 +30,11 @@ class _CameraPageState extends State<CameraPage> {
         cameras[direction], ResolutionPreset.high,
         enableAudio: false);
 
-    await cameraController.initialize().then((_) {
-      if (!mounted) return;
+    await cameraController.initialize().then((value) {
+      isready = true;
+      if (!mounted) {
+        return;
+      }
       setState(() {});
     }).catchError((e) {
       print(e);
@@ -67,45 +71,52 @@ class _CameraPageState extends State<CameraPage> {
 
   @override
   Widget build(BuildContext context) {
-    if (!cameraController.value.isInitialized) {
-      return SizedBox();
-    }
-    return Scaffold(
-      body: Stack(
-        children: [
-          Positioned.fill(child: CameraPreview(cameraController)),
-          GestureDetector(
-            onTap: () {
-              setState(() {
-                direction = direction == 0 ? 1 : 0;
-                startCamera();
-              });
-            },
-            child: button(Icons.flip_camera_ios_outlined, Alignment.bottomLeft),
-          ),
-          GestureDetector(
-            onTap: () async {
-              final XFile? file = await cameraController.takePicture();
-              if (file != null) {
-                final File imageFile = File(file.path);
-                await detectIntoxication(imageFile);
-              }
-            },
-            child: button(Icons.camera_alt_outlined, Alignment.bottomCenter),
-          ),
-          Positioned(
-            child: Text(
-              _intoxicationLevel.isNotEmpty
-                  ? "Intoxication Level: $_intoxicationLevel"
-                  : "Take a picture to detect intoxication",
-              style: TextStyle(color: Colors.white, fontSize: 16),
+    if(isready){
+      return Scaffold(
+        body: Stack(
+          children: [
+            Positioned.fill(child: CameraPreview(cameraController)),
+            GestureDetector(
+              onTap: () {
+                setState(() {
+                  direction = direction == 0 ? 1 : 0;
+                  startCamera();
+                });
+              },
+              child:
+                  button(Icons.flip_camera_ios_outlined, Alignment.bottomLeft),
             ),
-            bottom: 100,
-            left: 10,
-          ),
-        ],
-      ),
-    );
+            GestureDetector(
+              onTap: () async {
+                final XFile? file = await cameraController.takePicture();
+                if (file != null) {
+                  final File imageFile = File(file.path);
+                  await detectIntoxication(imageFile);
+                }
+              },
+              child: button(Icons.camera_alt_outlined, Alignment.bottomCenter),
+            ),
+            Positioned(
+              child: Text(
+                _intoxicationLevel.isNotEmpty
+                    ? "Intoxication Level: $_intoxicationLevel"
+                    : "Take a picture to detect intoxication",
+                style: TextStyle(color: Colors.white, fontSize: 16),
+              ),
+              bottom: 100,
+              left: 10,
+            ),
+          ],
+        ),
+      );
+    }
+    else{
+      return Scaffold(
+        body: Center(
+          child: CircularProgressIndicator(),
+        ),
+      );
+    }
   }
 }
 

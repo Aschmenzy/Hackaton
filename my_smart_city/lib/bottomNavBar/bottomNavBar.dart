@@ -37,15 +37,24 @@ class _NavBarState extends State<NavBar> {
     return Scaffold(
       bottomNavigationBar: CurvedNavigationBar(
         height: 60,
-        backgroundColor: Colors.blue,
+        animationCurve: standardEasing,
+        color: Color.fromARGB(255, 181, 139, 233),
+        backgroundColor: Color.fromARGB(255, 255, 255, 255),
         key: _bottomNavigationKey,
         items: <Widget>[
           Icon(Icons.home,
-              size: 25, color: _page == 0 ? Colors.blue : Colors.black),
+              size: 35,
+              color: _page == 0
+                  ? Color.fromARGB(255, 255, 255, 255)
+                  : Colors.white),
           Icon(Icons.photo_camera,
-              size: 25, color: _page == 1 ? Colors.blue : Colors.black),
+              size: 35,
+              color:
+                  _page == 1 ? Color.fromARGB(255, 255, 255, 255) : Colors.white),
           Icon(Icons.settings,
-              size: 25, color: _page == 2 ? Colors.blue : Colors.black),
+              size: 35,
+              color:
+                  _page == 2 ? Color.fromARGB(255, 255, 255, 255) : Colors.white),
         ],
         onTap: (index) {
           setState(() {

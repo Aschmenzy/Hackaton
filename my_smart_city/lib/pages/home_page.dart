@@ -23,14 +23,14 @@ class _HomePageState extends State<HomePage> {
             child: Column(
               children: [
                 const SizedBox(
-                  height: 20,
+                  height: 10,
                 ),
                 Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
                     Container(
                       decoration: BoxDecoration(
-                          color: Theme.of(context).primaryColor,
+                          color: Color.fromARGB(255, 181, 139, 233),
                           borderRadius: BorderRadius.circular(20)),
                       alignment: Alignment.center,
                       height: 80,
@@ -77,7 +77,7 @@ class _HomePageState extends State<HomePage> {
                                 fontSize: 32, fontWeight: FontWeight.w800),
                           ),
                           const SizedBox(
-                            width: 100,
+                            width: 70,
                           ),
                           GestureDetector(
                             onTap: () {
@@ -92,7 +92,7 @@ class _HomePageState extends State<HomePage> {
                               height: 50,
                               width: 100,
                               decoration: BoxDecoration(
-                                  color: Theme.of(context).primaryColor,
+                                  color: Color.fromARGB(255, 181, 139, 233),
                                   borderRadius: BorderRadius.circular(24),
                                   boxShadow: [
                                     BoxShadow(
@@ -175,7 +175,7 @@ class _HomePageState extends State<HomePage> {
                             ),
                             child: const Icon(
                               Icons.more_vert,
-                              color: Colors.blue,
+                              color: Color.fromARGB(255, 181, 139, 233),
                             ),
                           )
                         ],
@@ -191,14 +191,12 @@ class _HomePageState extends State<HomePage> {
                       Row(
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
-                         
                           Container(
                             height: 250,
                             width: 320,
                             decoration: BoxDecoration(
                               color: Colors.white,
                               borderRadius: BorderRadius.circular(24),
-                              
                             ),
                             child: Image.asset('lib/assets/graf.jpg'),
                           )
