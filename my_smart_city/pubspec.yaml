@@ -47,6 +47,9 @@ dependencies:
   firebase_ml_custom: ^0.2.0+3
   tflite_flutter: ^0.10.4
   tflite: ^1.1.2
+  firebase_storage: ^11.5.6
+  intl: ^0.19.0
+  flutter_svg: ^2.0.5
 
 dev_dependencies:
   flutter_test:
@@ -75,8 +78,8 @@ flutter:
   assets:
     - lib/assets/graf.jpg
     - lib/assets/labels.txt
-    - lib/assets/model_unquant.tflite
-
+    - lib/assets/intoxication_detection.tflite
+    - lib/assets/Logo2.svg
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/assets-and-images/#resolution-aware
 

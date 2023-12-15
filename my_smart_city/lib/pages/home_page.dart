@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:my_smart_city/pages/camera_page.dart';
@@ -26,23 +27,12 @@ class _HomePageState extends State<HomePage> {
                   height: 10,
                 ),
                 Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
+                  mainAxisAlignment: MainAxisAlignment.start,
                   children: [
-                    Container(
-                      decoration: BoxDecoration(
-                          color: Color.fromARGB(255, 181, 139, 233),
-                          borderRadius: BorderRadius.circular(20)),
-                      alignment: Alignment.center,
-                      height: 80,
-                      width: 250,
-                      child: const Text(
-                        "My Smart City",
-                        style: TextStyle(
-                            color: Colors.white,
-                            fontSize: 22,
-                            fontWeight: FontWeight.w600),
-                      ),
-                    )
+                    SizedBox(
+                        height: 50,
+                        width: 140,
+                        child: SvgPicture.asset("lib/assets/Logo2.svg"))
                   ],
                 ),
                 const SizedBox(
@@ -72,7 +62,7 @@ class _HomePageState extends State<HomePage> {
                             width: 20,
                           ),
                           Text(
-                            'Hi ${box.get('UserName')}',
+                            'Hi Karlo',
                             style: GoogleFonts.inter(
                                 fontSize: 32, fontWeight: FontWeight.w800),
                           ),
